@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>#{msg['miclima.alta.title']}</title>
+</h:head>
+<h:body>
+    <h1>MiClima.org</h1>
+    <h:form>
+    	<f:event listener="#{registerManagedBean.cleanAndUpdateData}" type="preRenderView"></f:event>
+        <p:messages autoUpdate="true" />
+        <p:panelGrid columns="2" layout="grid" >
+            <p:outputLabel for="validated" value="#{msg['miclima.alta.validated']}" />
+            <p:selectBooleanCheckbox id="validated" value="#{registerManagedBean.climateRecord.validated}" />
+            
+            <p:outputLabel for="cities" value="#{msg['miclima.alta.city']}" />
+            <p:selectOneMenu id="cities" value="#{registerManagedBean.climateRecord.city}" converter="#{cityConverter}" >
+                <f:selectItems value="#{registerManagedBean.cities}" var="citySelected" itemLabel="#{citySelected.name}" itemValue="#{citySelected}" />
+            </p:selectOneMenu>
+            
+            <p:outputLabel for="temperature" value="#{msg['miclima.alta.temperature']}" />
+            <p:inputText id="temperature" value="#{registerManagedBean.climateRecord.temperature}" validatorMessage="#{msg['miclima.alta.temperature.validator']}" >
+            	<f:validateRequired />
+            </p:inputText>
+            
+            <p:outputLabel for="humidity" value="#{msg['miclima.alta.humidity']}" />
+            <p:inputText id="humidity" value="#{registerManagedBean.climateRecord.humidity}" validatorMessage="#{msg['miclima.alta.humidity.validator']}" >           	
+            	<f:validateRequired />
+            	<f:validateLongRange minimum="0" maximum="100" />
+            </p:inputText>
+            
+            <p:outputLabel for="precipitation" value="#{msg['miclima.alta.precipitation']}" />
+            <p:inputText id="precipitation" value="#{registerManagedBean.climateRecord.precipitation}" validatorMessage="#{msg['miclima.alta.precipitation.validator']}" >        	
+            	<f:validateRequired />
+            	<f:validateLongRange minimum="0" />
+            </p:inputText>
+            
+            <p:outputLabel for="calendar" value="#{msg['miclima.alta.date']}" />
+            <p:calendar id="calendar" value="#{registerManagedBean.climateRecord.recordDate}" mode="popup" showOn="both" locale="es" navigator="true" pattern="dd/MM/yyyy HH:mm" validatorMessage="#{msg['miclima.alta.fecha.validator']}">           	
+            	<f:validateRequired />
+            	<f:validator validatorId="dateValidator" />
+            </p:calendar>
+            
+            <p:outputLabel for="dayTypes" value="#{msg['miclima.alta.daytype']}" />
+            <p:selectOneMenu id="dayTypes" value="#{registerManagedBean.climateRecord.dayType}" converter="#{dayTypeConverter}" >
+                <f:selectItems value="#{registerManagedBean.dayTypes}" var="dayTypeSelected" itemLabel="#{dayTypeSelected.type}" itemValue="#{dayTypeSelected}" />
+            </p:selectOneMenu>
+        </p:panelGrid>
+        <p:commandButton value="Añadir" action="#{registerManagedBean.addClimateRecord}" validateClient="client" ajax="false" />
+    </h:form>
+</h:body>
+</html>

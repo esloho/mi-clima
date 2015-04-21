@@ -1,0 +1,51 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:p="http://primefaces.org/ui">
+<h:head>
+	<title>#{msg['miclima.list.title']}</title>
+</h:head>
+<h:body>
+	<h1>MiClima.org</h1>
+	<p align="right">
+	   <p:button outcome="alta" value="#{msg['miclima.list.new.record']}"/>
+	</p>
+	<h:form>
+	<f:event listener="#{climateRecordManagedBean.updateLatestData}" type="preRenderView"></f:event>
+		<p:dataTable value="#{climateRecordManagedBean.climateRecords}"
+			var="climateRecord" widgetVar="climateRecordsTable" emptyMessage="#{msg['mclima.list.filter.empty']}" 
+			filteredValue="#{climateRecordManagedBean.filteredRecords}"
+			paginator="true" rows="5" paginatorPosition="bottom" 
+			paginatorTemplate="{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}" 
+			rowsPerPageTemplate="5,10,15">
+			<p:column filterBy="#{climateRecord.city.name}" filterMatchMode="exact" sortBy="#{climateRecord.city.name}" headerText="#{msg['miclima.list.city']}">
+				<f:facet name="filter">
+				    <p:selectOneMenu onchange="PF('climateRecordsTable').filter()">
+				        <f:selectItem itemLabel="#{msg['mclima.list.filter.label']}" />
+				        <f:selectItems value="#{climateRecordManagedBean.cityNames}" />
+				    </p:selectOneMenu>
+				</f:facet>
+				<h:outputText value="#{climateRecord.city.name}"></h:outputText>
+			</p:column>
+			<p:column headerText="#{msg['miclima.list.date']}">
+				<h:outputText value="#{climateRecord.recordDate}" >
+				    <f:convertDateTime pattern="dd/MM/yyyy" />
+				</h:outputText>
+			</p:column>
+			<p:column sortBy="#{climateRecord.temperature}" headerText="#{msg['miclima.list.temperature']}">
+				<h:outputText value="#{climateRecord.temperature}"></h:outputText>
+			</p:column>
+			<p:column headerText="#{msg['miclima.list.humidity']}">
+				<h:outputText value="#{climateRecord.humidity}"></h:outputText>
+			</p:column>
+			<p:column headerText="#{msg['miclima.list.precipitation']}">
+				<h:outputText value="#{climateRecord.precipitation}"></h:outputText>
+			</p:column>
+			<p:column headerText="#{msg['miclima.list.daytype']}">
+				<h:outputText value="#{climateRecord.dayType.type}"></h:outputText>
+			</p:column>
+		</p:dataTable>
+	</h:form>
+</h:body>
+</html>
